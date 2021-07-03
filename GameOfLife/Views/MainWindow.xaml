@@ -1,0 +1,103 @@
+﻿<Window x:Class="GameOfLife.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        DataContext="{StaticResource MainViewModel}"
+        Title="{Binding Source={StaticResource MainViewModel}, Path=Title}" 
+        Height="{Binding Source={StaticResource MainViewModel}, Path=WindowHeight}" 
+        Width="{Binding Source={StaticResource MainViewModel}, Path=WindowWidth}"
+        >
+
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <Style x:Key="BtnStyle" TargetType="Button">
+                <Setter Property="Width" Value ="100"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="Background" Value="CadetBlue"/>
+                <Setter Property="FontStyle" Value="Normal"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+
+            <Style x:Key="BtnLife" TargetType="Button">
+                <Setter Property="Margin" Value="2,0,0,0"/>
+                <Setter Property="Background" Value="Gray"/>
+                <Setter Property="FontStyle" Value="Normal"/>
+                <Setter Property="Height" Value="15"/>
+                <Setter Property="Width" Value="15"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                        <Setter Property="Background" Value="White"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="ListBoxItem" x:Key="BoxItem" >
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border Name="_Border"
+                                    BorderThickness="0"
+                                    BorderBrush="Black"
+                                    Padding="0"
+                                    Margin="0">
+                                <ContentPresenter />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+            </Style>
+
+            <Style TargetType="ListBox">
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel  VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="0" Orientation="Vertical">
+            <ListBox Style="{StaticResource ResourceKey={x:Type ListBox}}" 
+                     ItemsSource="{Binding LifeGrid}" 
+                     ItemContainerStyle="{StaticResource BoxItem}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ListBox  ItemsSource="{Binding}" ItemContainerStyle="{StaticResource BoxItem}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource BtnLife}" Command="{Binding ClickedBtnCommand}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel  Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+            <Button Content="Start" Style="{StaticResource BtnStyle}" Command="{Binding StartPlayCommand}"/>
+            <Button Content="Pause" Style="{StaticResource BtnStyle}" Command="{Binding StopPlayCommand}"/>
+            <Button Content="Clean" Style="{StaticResource BtnStyle}" Command="{Binding ClearPlayCommand}"/>
+            <Button Content="Next step" Style="{StaticResource BtnStyle}" Command="{Binding NextStepCommand}"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
